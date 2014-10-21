@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user,  only: [:show, :edit, :update]
   before_action :correct_user,    only: [:show, :edit, :update]
   before_action :admin_user,      only: [:index, :destroy]
+  before_action :examiner_user,   only: [:index]
 
   def show
     @user = User.find_by_id(params[:id])
@@ -60,6 +61,10 @@ class UsersController < ApplicationController
     end
 
     def admin_user
-      redirect_to root_url unless current_user.admin?
+      redirect_to root_url, flash: { danger: "Access denied" } unless current_user.admin?
+    end
+
+    def examiner_user
+      redirect_to root_url, flash: { danger: "Access denied" } unless current_user.examiner?
     end
 end
