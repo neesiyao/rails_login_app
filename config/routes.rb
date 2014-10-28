@@ -1,10 +1,21 @@
 Rails.application.routes.draw do
+  resources :tests
+
   root                'sessions#new'
   get 'signup'    =>  'users#new'
   get 'login'     =>  'sessions#new'
   post 'login'    =>  'sessions#create'
   delete 'logout' =>  'sessions#destroy'
-  resources :users
+
+  resources :users do
+    # collection do
+    #   put :make_admin
+    # end
+
+    # member do
+    #   put :make_admin
+    # end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

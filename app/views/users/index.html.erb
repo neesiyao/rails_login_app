@@ -5,9 +5,23 @@
 <ul class="users">
   <% @users.each do |user| %>
     <li>
-      <%= link_to user.name, user %>
+      <div class='col-md-3'>
+        <%= link_to user.name, user %>
+      </div>
       <% if current_user.admin? && user != current_user %>
-        | <%= link_to "delete", user, method: :delete, data: { confirm: "Are you sure?" } %>
+        <div class='col-md-3'>
+          <% unless user.examiner? %>
+            <%= link_to "make examiner", user, data: { confirm: "Make " + user.name + " an examiner?" } %>
+          <% else %>
+            <%= link_to "remove examiner", user, data: { confirm: "Remove " + user.name + " as examiner?" } %>
+          <% end %>
+        </div>
+        <div class='col-md-3'>
+          <%= link_to "edit", edit_user_path(user) %>
+        </div>
+        <div class='col-md-3'>
+          <%= link_to "DELETE", user, method: :destroy, data: { confirm: "Delete " + user.name + "?" } %>
+        </div>
       <% end %>
     </li>
   <% end %>

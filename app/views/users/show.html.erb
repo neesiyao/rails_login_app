@@ -4,3 +4,17 @@
 <p>
   <%= @user.email %>
 </p>
+<p>
+  Admin: <%= @user.admin? %>
+</p>
+<p>
+  Examiner: <%= @user.examiner? %>
+</p>
+<% if @user.examiner? %>
+  <div class='col-md-3'>
+      Create a new test
+  </div>
+  <div class='col-md-3'>
+      Edit an existing test
+  </div>
+<% end %>

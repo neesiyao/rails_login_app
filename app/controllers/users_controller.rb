@@ -65,6 +65,6 @@ class UsersController < ApplicationController
     end
 
     def examiner_user
-      redirect_to root_url, flash: { danger: "Access denied" } unless current_user.examiner?
+      redirect_to :back, flash: { danger: "Access denied" } unless current_user.examiner? || current_user.admin?
     end
 end
