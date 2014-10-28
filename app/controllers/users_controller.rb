@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       log_in @user
-      redirect_to @user, flash: { success: "You have successfully created an account" }
+      redirect_to @user, flash: { success: "Account was successfully created" }
     else
       render 'new'
     end
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find_by_id(params[:id])
     if @user.update_attributes(user_params)
-      redirect_to @user, flash: { success: "Profile successfully updated" }
+      redirect_to @user, flash: { success: "Profile was successfully updated" }
     else
       render 'edit'
     end
@@ -41,7 +41,7 @@ class UsersController < ApplicationController
 
   def destroy
     User.find_by_id(params[:id]).destroy
-    redirect_to users_url, flash: { success: "User deleted" }
+    redirect_to users_url, flash: { success: "User was successfully deleted" }
   end
 
   private
