@@ -7,6 +7,17 @@
   <%= link_to 'New test', new_test_path %>
 </p>
 <ul class="tests">
+  <li>
+    <div class='col-md-3'>
+      Name
+    </div>
+    <div class='col-md-3'>
+      Description
+    </div>
+    <div class='col-md-3'>
+      Actions
+    </div>
+  </li>
   <% @tests.each do |test| %>
     <li>
       <div class='col-md-3'>
@@ -17,7 +28,7 @@
       </div>
       <div class='col-md-3'>
         <%= link_to 'Edit', edit_test_path(test) %> |
-        <%= link_to 'DELETE', method: :delete, data: { confirm: "Delete " + test.name + "?" } %>
+        <%= link_to 'DELETE', test, method: :delete, data: { confirm: "Delete " + test.name + "?" } %>
       </div>
     </li>
   <% end %>
