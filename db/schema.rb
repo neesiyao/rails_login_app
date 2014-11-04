@@ -15,15 +15,15 @@ ActiveRecord::Schema.define(version: 20141028102319) do
 
   create_table "invitations", force: true do |t|
     t.string   "email"
-    t.integer  "test_id"
+    t.integer  "quiz_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "invitations", ["test_id", "created_at"], name: "index_invitations_on_test_id_and_created_at"
-  add_index "invitations", ["test_id"], name: "index_invitations_on_test_id"
+  add_index "invitations", ["quiz_id", "created_at"], name: "index_invitations_on_quiz_id_and_created_at"
+  add_index "invitations", ["quiz_id"], name: "index_invitations_on_quiz_id"
 
-  create_table "tests", force: true do |t|
+  create_table "quizzes", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.datetime "created_at"

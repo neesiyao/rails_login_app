@@ -5,12 +5,25 @@
 </h1>
 
 <p>
-  <%= link_to 'Back', tests_path %>
+  <%= link_to 'Back', quiz_path(@quiz.id) %>
 </p>
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <%= form_for([@test, @invitation]) do |f| %>
+    <%= form_for([@quiz, @invitation]) do |f| %>
+
+      <% if @invitation.errors.any? %>
+        <div id="error_explanation">
+          <div class="alert alert-danger">
+            The form contains <%= pluralize(@invitation.errors.count, "error") %>.
+          </div>
+          <ul>
+          <% @invitation.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
 
       <%= f.label :email %>
       <%= f.text_field :email, class: 'form-control' %>

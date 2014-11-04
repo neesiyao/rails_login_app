@@ -1,12 +1,16 @@
-<% provide(:title, 'New test') %>
+<% provide(:title, 'Update quiz') %>
 
 <h1>
-  New test
+  Update quiz
 </h1>
+
+<p>
+  <%= link_to 'Back', quiz_path %>
+</p>
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <%= form_for(@test) do |f| %>
+    <%= form_for(@quiz) do |f| %>
 
       <%= f.label :name %>
       <%= f.text_field :name, class: 'form-control' %>
@@ -14,7 +18,7 @@
       <%= f.label :description %>
       <%= f.text_field :description, class: 'form-control' %>
 
-      <%= f.submit "Create test", class: "btn btn-primary" %>
+      <%= f.submit "Save changes", class: "btn btn-primary" %>
 
     <% end %>
   </div>

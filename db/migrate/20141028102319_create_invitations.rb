@@ -2,10 +2,10 @@ class CreateInvitations < ActiveRecord::Migration
   def change
     create_table :invitations do |t|
       t.string :email
-      t.references :test, index: true
+      t.references :quiz, index: true
 
       t.timestamps
     end
-    add_index :invitations, [:test_id, :created_at]
+    add_index :invitations, [:quiz_id, :created_at]
   end
 end

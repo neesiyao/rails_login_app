@@ -1,6 +1,8 @@
 class Invitation < ActiveRecord::Base
-  belongs_to :test
+  belongs_to :quiz
   default_scope -> { order('created_at DESC') }
-  validates :test_id, presence: true
-  validates :email, presence: true
+  validates :quiz_id, presence: true
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
+                    uniqueness: { case_sensitive: false }
 end

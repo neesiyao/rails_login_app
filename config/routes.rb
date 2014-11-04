@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   resources :users
 
-  resources :tests do
+  resources :quizzes do
     resources :invitations
   end
 
