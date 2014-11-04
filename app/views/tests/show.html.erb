@@ -1,14 +1,34 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Name:</strong>
+<h1>
   <%= @test.name %>
+</h1>
+
+<p>
+  <strong>Description:</strong> <%= @test.description %>
 </p>
 
 <p>
-  <strong>Description:</strong>
-  <%= @test.description %>
+  <%= link_to 'Invite', new_test_invitation_path(@test, @invitation) %> |
+  <%= link_to 'Edit', edit_test_path(@test) %> |
+  <%= link_to 'Back', tests_path %>
 </p>
 
-<%= link_to 'Edit', edit_test_path(@test) %> |
-<%= link_to 'Back', tests_path %>
+<h3>
+  Invitations (<%= @test.invitations.count %>)
+</h3>
+<ol class="invitations">
+  <% if @test.invitations.any? %>
+    <% @test.invitations.each do |invitation| %>
+      <li id="invitation-<%= invitation.id %>">
+        <div class='col-md-3'>
+          <%= link_to invitation.email %>
+        </div>
+        <div class='col-md-3'>
+          Invited <%= time_ago_in_words(invitation.created_at) %> ago.
+        </div>
+        <div class='col-md-3'>
+          <%= link_to 'DELETE', [@test, invitation], method: :delete, data: { confirm: "Delete invitation to " + invitation.email + "?" } %>
+        </div>
+      </li>
+    <% end %>
+  <% end %>
+</ol>
