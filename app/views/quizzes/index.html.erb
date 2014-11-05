@@ -3,8 +3,10 @@
 <h1>
   All quizzes
 </h1>
+
 <p>
-  <%= link_to 'New quiz', new_quiz_path %>
+  <%= link_to 'Back', :back %> |
+  <%= link_to 'New quiz', :back %>
 </p>
 <ul class="quizzes">
   <li>
@@ -27,6 +29,7 @@
         <%= quiz.description %>
       </div>
       <div class='col-md-3'>
+        <%= link_to 'Invite', new_quiz_invitation_path(quiz) %> |
         <%= link_to 'Edit', edit_quiz_path(quiz) %> |
         <%= link_to 'DELETE', quiz, method: :delete, data: { confirm: "Delete " + quiz.name + "?" } %>
       </div>

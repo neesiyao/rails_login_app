@@ -1,5 +1,8 @@
 class QuizzesController < ApplicationController
   before_action :set_quiz, only: [:show, :edit, :update, :destroy]
+  before_action :logged_in_user
+  before_action :admin_user
+  before_action :examiner_user
 
   # GET /tests
   # GET /tests.json
@@ -29,7 +32,7 @@ class QuizzesController < ApplicationController
     if @quiz.save
       redirect_to @quiz, flash: { success: 'Quiz was successfully created' }
     else
-      render :new
+      render 'new'
     end
   end
 
@@ -39,7 +42,7 @@ class QuizzesController < ApplicationController
     if @quiz.update(quiz_params)
       redirect_to @quiz, flash: { success: 'Quiz was successfully updated' }
     else
-      render :edit
+      render 'edit'
     end
   end
 

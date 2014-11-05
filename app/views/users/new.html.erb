@@ -1,7 +1,13 @@
 <% provide(:title, 'New user') %>
+
 <h1>
   New user
 </h1>
+
+<p>
+  <%= link_to 'Back', :back %>
+</p>
+
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <%= form_for(@user) do |f| %>

@@ -1,4 +1,8 @@
 class InvitationsController < ApplicationController
+  before_action :logged_in_user
+  before_action :admin_user
+  before_action :examiner_user
+  
   def index
     @invitations = Invitation.all
   end
@@ -19,10 +23,21 @@ class InvitationsController < ApplicationController
   def create
     @quiz = Quiz.find(params[:quiz_id])
     @invitation = @quiz.invitations.new(invitation_params)
+    @invitation.sender_name = current_user.name
     if @invitation.save
-      redirect_to @invitation.quiz, flash: { success: 'Invited' }
+      @email = @invitation.email
+      if !(User.exists?(email: @email))
+        @password = generate_random_password
+        @user = User.new(name: get_name_from_email(@email), email: @email, password: @password, password_confirmation: @password)
+          if @user.save
+            UserMailer.quiz_invitation(@invitation.sender_name, @user).deliver
+          else
+            render 'new'
+          end
+      end
+      redirect_to @invitation.quiz, flash: { success: 'Invitation was successfully sent to ' + @email }
     else
-      render :new
+      render 'new'
     end
   end
 
@@ -30,7 +45,7 @@ class InvitationsController < ApplicationController
     if @invitation.update(invitation_params)
       redirect_to @invitation.quiz, flash: { success: 'Invitation was successfully updated' }
     else
-      render :edit
+      render 'edit'
     end
   end
 
@@ -43,5 +58,13 @@ class InvitationsController < ApplicationController
   private
     def invitation_params
       params.require(:invitation).permit(:email)
+    end
+
+    def get_name_from_email(email)
+      name = email.partition('@')[0]
+    end
+
+    def generate_random_password
+      random_password = Array.new(10).map { (65 + rand(58)).chr }.join
     end
 end

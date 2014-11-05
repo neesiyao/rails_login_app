@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   before_action :logged_in_user,  only: [:show, :edit, :update]
   before_action :correct_user,    only: [:show, :edit, :update]
-  before_action :admin_user,      only: [:index, :destroy]
-  before_action :examiner_user,   only: [:index]
+  before_action :admin_user,      only: [:destroy, :new]
+  before_action :examiner_user,   only: [:index, :new]
 
   def show
     @user = User.find_by_id(params[:id])
@@ -32,9 +32,11 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find_by_id(params[:id])
-    if @user.update_attributes(user_params)
+    user = User.find_by_email(@user.email).try(:authenticate, params[:current_password])
+    if user && @user.update_attributes(user_params)
       redirect_to @user, flash: { success: "Profile was successfully updated" }
     else
+      flash[:danger] = "Please enter your current password"
       render 'edit'
     end
   end
@@ -49,22 +51,5 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation)
-    end
-
-    def logged_in_user
-        redirect_to login_url, flash: { danger: "Please log in" } unless logged_in?
-    end
-
-    def correct_user
-      @user = User.find_by_id(params[:id])
-      redirect_to root_url unless @user == current_user || current_user.admin?
-    end
-
-    def admin_user
-      redirect_to root_url, flash: { danger: "Access denied" } unless current_user.admin?
-    end
-
-    def examiner_user
-      redirect_to :back, flash: { danger: "Access denied" } unless current_user.examiner? || current_user.admin?
     end
 end
