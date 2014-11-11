@@ -1,10 +1,15 @@
 2359 Media Quiz Invitation
 
-You have been invited to a quiz by 2359 Media.
+You have been invited to the following quiz by <%= @sender_name %>:
+
+  <%= @quiz.name %>
+  <%= @quiz.description %>
 
 A new account has been created for you and the following are your login details:
 
-Login: <%= @email %>
-Password: <%= @password %>
+<% if @is_new_user %>
+  Login: <%= @user.email %>
+  Password: <%= @user.password %>
+<% end %>
 
-Click <a href="http://192.168.1.104:3000">here</a> to login.
+Go to http://192.168.1.104:3000 now to login.

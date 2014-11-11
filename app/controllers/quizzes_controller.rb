@@ -1,8 +1,8 @@
 class QuizzesController < ApplicationController
-  before_action :set_quiz, only: [:show, :edit, :update, :destroy]
+  before_action :set_quiz,      only: [:show, :edit, :update, :destroy]
   before_action :logged_in_user
-  before_action :admin_user
-  before_action :examiner_user
+  before_action :invited_user,  only: [:show]
+  before_action :examiner_user, except: [:show]
 
   # GET /tests
   # GET /tests.json
@@ -62,5 +62,11 @@ class QuizzesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def quiz_params
       params.require(:quiz).permit(:name, :description)
+    end
+
+    def invited_user
+      @quiz = Quiz.find(params[:id])
+      @invitation = @quiz.invitations.where(email: current_user.email)
+      redirect_to root_url, flash: { danger: "Access denied" } unless !@invitation.empty? || current_user.examiner? || current_user.admin?
     end
 end

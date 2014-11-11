@@ -3,15 +3,20 @@
 </h1>
 
 <p>
-  <%= link_to 'Back', :back %> |
-  <%= link_to 'Edit', edit_quiz_path(@quiz) %> |
-  <%= link_to 'Invite', new_quiz_invitation_path(@quiz, @invitation) %>
+  <% if current_user.examiner? || current_user.admin? %>
+    <%= link_to 'Back', quizzes_path %> |
+    <%= link_to 'Edit', edit_quiz_path(@quiz) %> |
+    <%= link_to 'Invite', new_quiz_invitation_path(@quiz, @invitation) %>
+  <% else %>
+    <%= link_to 'Back', :back %>
+  <% end %>
 </p>
 
 <p>
   <strong>Description:</strong> <%= @quiz.description %>
 </p>
 
+<% if current_user.examiner? || current_user.admin? %>
 <h3>
   Invitations (<%= @quiz.invitations.count %>)
 </h3>
@@ -32,3 +37,4 @@
     <% end %>
   <% end %>
 </ol>
+<% end %>

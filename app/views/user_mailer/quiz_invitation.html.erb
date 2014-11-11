@@ -1,18 +1,26 @@
 <h1>2359 Media Quiz Invitation</h1>
 
 <p>
-  You have been invited to a quiz by 2359 Media.
+  You have been invited to the following quiz by <%= @sender_name %>:
+</p>
+
+<p>
+  <%= @quiz.name %>
+  <br>
+  <%= @quiz.description %>
 </p>
 
 <p>
   A new account has been created for you and the following are your login details:
 </p>
 
-<p>
-  Login: <%= @email %>
-  <br>
-  Password: <%= @password %>
-</p>
+<% if @is_new_user %>
+  <p>
+    Login: <%= @user.email %>
+    <br>
+    Password: <%= @user.password %>
+  </p>
+<% end %>
 
 <p>
   Click <a href="http://192.168.1.104:3000">here</a> to login.

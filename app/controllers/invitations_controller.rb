@@ -2,7 +2,7 @@ class InvitationsController < ApplicationController
   before_action :logged_in_user
   before_action :admin_user
   before_action :examiner_user
-  
+
   def index
     @invitations = Invitation.all
   end
@@ -26,11 +26,14 @@ class InvitationsController < ApplicationController
     @invitation.sender_name = current_user.name
     if @invitation.save
       @email = @invitation.email
-      if !(User.exists?(email: @email))
+      if (User.exists?(email: @email))
+        @user = User.find_by(email: @email)
+        UserMailer.quiz_invitation(@invitation.sender_name, @user, @quiz, false).deliver
+      else
         @password = generate_random_password
         @user = User.new(name: get_name_from_email(@email), email: @email, password: @password, password_confirmation: @password)
           if @user.save
-            UserMailer.quiz_invitation(@invitation.sender_name, @user).deliver
+            UserMailer.quiz_invitation(@invitation.sender_name, @user, @quiz, true).deliver
           else
             render 'new'
           end

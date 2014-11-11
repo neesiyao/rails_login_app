@@ -6,6 +6,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find_by_id(params[:id])
+    @invitations = Invitation.where(email: @user.email)
   end
 
   def index

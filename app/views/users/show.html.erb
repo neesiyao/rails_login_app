@@ -9,12 +9,16 @@
 <p>
   Login: <%= @user.email %>
 </p>
-<p>
-  Admin: <%= @user.admin? %>
-</p>
-<p>
-  Examiner: <%= @user.examiner? %>
-</p>
+
+<% if current_user.admin? %>
+  <p>
+    Admin: <%= @user.admin? %>
+  </p>
+  <p>
+    Examiner: <%= @user.examiner? %>
+  </p>
+<% end %>
+
 <% if @user.examiner? %>
   <div class='col-md-3'>
       View all quizzes
@@ -22,4 +26,42 @@
   <div class='col-md-3'>
       Create a new quiz
   </div>
+<% end %>
+
+<% if !@invitations.empty? %>
+  You are invited to answer the following quizzes:
+  <br>
+  <ul class='invitations'>
+    <li>
+      <div class='col-md-3'>
+        <strong>Name
+      </div>
+      <div class='col-md-3'>
+        Description
+      </div>
+      <div class='col-md-3'>
+        Sender
+      </div>
+      <div class='col-md-3'>
+        Invited at
+      </strong>
+      </div>
+    </li>
+    <% @invitations.each do |invitation| %>
+      <li>
+        <div class='col-md-3'>
+          <%= link_to invitation.quiz.name, invitation.quiz %>
+        </div>
+        <div class='col-md-3'>
+          <%= invitation.quiz.description %>
+        </div>
+        <div class='col-md-3'>
+          <%= invitation.sender_name %>
+        </div>
+        <div class='col-md-3'>
+          <%= invitation.created_at %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
 <% end %>
