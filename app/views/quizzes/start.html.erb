@@ -1,0 +1,13 @@
+<h1>
+  <%= @quiz.name %>
+</h1>
+
+<p>
+  <%= link_to 'Back', quiz_path %>
+</p>
+
+<p>
+  <strong>
+    <%= distance_of_time_in_words(Time.now.localtime, @end_time_converted, include_seconds: true) %> remaining
+  </strong>
+</p>

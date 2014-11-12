@@ -8,13 +8,29 @@
     <%= link_to 'Edit', edit_quiz_path(@quiz) %> |
     <%= link_to 'Invite', new_quiz_invitation_path(@quiz, @invitation) %>
   <% else %>
-    <%= link_to 'Back', :back %>
+    <%= link_to 'Back', root_url %>
   <% end %>
 </p>
 
 <p>
   <strong>Description:</strong> <%= @quiz.description %>
 </p>
+
+<% if @invitation.end_time.blank? %>
+  <p>
+    <strong>Time limit:</strong> <%= @quiz.time_limit %> minutes
+  </p>
+  <p>
+    <%= link_to 'START NOW', start_quiz_path(@quiz), class: 'btn btn-primary' %>
+  </p>
+<% else %>
+  <p>
+    <strong>Time remaining: <%= distance_of_time_in_words(Time.now.localtime, @end_time_converted, include_seconds: true) %></strong>
+  </p>
+  <p>
+  <%= link_to 'CONTINUE', start_quiz_path(@quiz), class: 'btn btn-primary' %>
+  </p>
+<% end %>
 
 <% if current_user.examiner? || current_user.admin? %>
 <h3>

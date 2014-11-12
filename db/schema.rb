@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141104083902) do
+ActiveRecord::Schema.define(version: 20141112031004) do
 
   create_table "invitations", force: true do |t|
     t.string   "email"
@@ -19,17 +19,14 @@ ActiveRecord::Schema.define(version: 20141104083902) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "sender_name"
+    t.string   "end_time"
   end
 
   add_index "invitations", ["quiz_id", "created_at"], name: "index_invitations_on_quiz_id_and_created_at"
   add_index "invitations", ["quiz_id"], name: "index_invitations_on_quiz_id"
 
-  create_table "quizzes", force: true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+# Could not dump table "quizzes" because of following NoMethodError
+#   undefined method `[]' for nil:NilClass
 
   create_table "users", force: true do |t|
     t.string   "name"

@@ -19,12 +19,21 @@ User.create!(name: "Nicholas Teo",
              email: "nicholasteo@gmail.com",
              password:              "foobar",
              password_confirmation: "foobar")
-10.times do |n|
+10.times do
   name  = Faker::Name.name
-  email = "example-#{n+1}@railstutorial.org"
+  email = Faker::Internet.safe_email
   password = "password"
   User.create!(name:  name,
                email: email,
                password:              password,
                password_confirmation: password)
+end
+
+5.times do |n|
+  name = "Quiz #{n+1}"
+  description = "This is quiz #{n+1}."
+  time_limit = 10
+  Quiz.create!(name:  name,
+               description: description,
+               time_limit: time_limit)
 end

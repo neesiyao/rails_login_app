@@ -1,8 +1,8 @@
 class QuizzesController < ApplicationController
   before_action :set_quiz,      only: [:show, :edit, :update, :destroy]
   before_action :logged_in_user
-  before_action :invited_user,  only: [:show]
-  before_action :examiner_user, except: [:show]
+  before_action :invited_user,  only: [:show, :start]
+  before_action :examiner_user, except: [:show, :start]
 
   # GET /tests
   # GET /tests.json
@@ -14,6 +14,10 @@ class QuizzesController < ApplicationController
   # GET /tests/1.json
   def show
     @quiz = Quiz.find(params[:id])
+    @invitation = @quiz.invitations.find_by_email(current_user.email)
+    if !@invitation.end_time.blank?
+      @end_time_converted = Time.parse(@invitation.end_time).localtime
+    end
   end
 
   # GET /tests/new
@@ -46,6 +50,15 @@ class QuizzesController < ApplicationController
     end
   end
 
+  def start
+    @quiz = Quiz.find(params[:id])
+    @invitation = @quiz.invitations.find_by_email(current_user.email)
+    if @invitation.end_time.blank?
+      @invitation.update(end_time: (Time.now.localtime + @quiz.time_limit.minutes).to_s)
+    end
+    @end_time_converted = Time.parse(@invitation.end_time).localtime
+  end
+
   # DELETE /tests/1
   # DELETE /tests/1.json
   def destroy
@@ -66,7 +79,7 @@ class QuizzesController < ApplicationController
 
     def invited_user
       @quiz = Quiz.find(params[:id])
-      @invitation = @quiz.invitations.where(email: current_user.email)
-      redirect_to root_url, flash: { danger: "Access denied" } unless !@invitation.empty? || current_user.examiner? || current_user.admin?
+      @invitation = @quiz.invitations.find_by_email(current_user.email)
+      redirect_to root_url, flash: { danger: "Access denied" } unless !@invitation.blank? || current_user.examiner? || current_user.admin?
     end
 end
