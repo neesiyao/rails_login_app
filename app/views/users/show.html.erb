@@ -37,13 +37,13 @@
         <div class='col-md-2'>
           Name
         </div>
-        <div class='col-md-2'>
+        <div class='col-md-4'>
           Description
         </div>
-        <div class='col-md-2'>
+        <div class='col-md-1'>
           Sender
         </div>
-        <div class='col-md-2'>
+        <div class='col-md-3'>
           Invited
         </div>
         <div class='col-md-2'>
@@ -56,19 +56,21 @@
         <div class='col-md-2'>
           <%= link_to invitation.quiz.name, invitation.quiz %>
         </div>
-        <div class='col-md-2'>
+        <div class='col-md-4'>
           <%= invitation.quiz.description %>
         </div>
-        <div class='col-md-2'>
+        <div class='col-md-1'>
           <%= invitation.sender_name %>
         </div>
-        <div class='col-md-2'>
+        <div class='col-md-3'>
           <%= time_ago_in_words(invitation.created_at) %> ago
         </div>
         <div class='col-md-2'>
           <strong>
             <% if invitation.end_time.blank? %>
               NOT YET STARTED
+            <% elsif Time.parse(invitation.end_time) <= Time.now %>
+              ENDED
             <% else %>
               IN-PROGRESS
             <% end %>

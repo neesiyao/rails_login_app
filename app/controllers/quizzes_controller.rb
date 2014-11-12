@@ -15,8 +15,11 @@ class QuizzesController < ApplicationController
   def show
     @quiz = Quiz.find(params[:id])
     @invitation = @quiz.invitations.find_by_email(current_user.email)
-    if !@invitation.end_time.blank?
-      @end_time_converted = Time.parse(@invitation.end_time).localtime
+    if !@invitation.blank?
+      @end_time = @invitation.end_time
+      if !@end_time.blank?
+        @end_time_converted = Time.parse(@end_time)
+      end
     end
   end
 
@@ -54,9 +57,12 @@ class QuizzesController < ApplicationController
     @quiz = Quiz.find(params[:id])
     @invitation = @quiz.invitations.find_by_email(current_user.email)
     if @invitation.end_time.blank?
-      @invitation.update(end_time: (Time.now.localtime + @quiz.time_limit.minutes).to_s)
+      @invitation.update(end_time: (Time.now + @quiz.time_limit.minutes).to_s)
     end
-    @end_time_converted = Time.parse(@invitation.end_time).localtime
+    @end_time_converted = Time.parse(@invitation.end_time)
+    if @end_time_converted <= Time.now
+      redirect_to :back, flash: { danger: "Quiz is over" }
+    end
   end
 
   # DELETE /tests/1
