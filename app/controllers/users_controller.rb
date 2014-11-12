@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user,  only: [:show, :edit, :update]
+  before_action :logged_in_user
   before_action :correct_user,    only: [:show, :edit, :update]
-  before_action :admin_user,      only: [:destroy, :new]
   before_action :examiner_user,   only: [:index, :new]
+  before_action :admin_user,      only: [:destroy]
 
   def show
     @user = User.find_by_id(params[:id])

@@ -7,29 +7,20 @@
 </p>
 
 <p>
-  Login: <%= @user.email %>
+  <strong>Login:</strong> <%= @user.email %>
 </p>
 
 <% if current_user.admin? %>
   <p>
-    Admin: <%= @user.admin? %>
+    <strong>Admin:</strong> <%= @user.admin? %>
   </p>
   <p>
-    Examiner: <%= @user.examiner? %>
+    <strong>Examiner:</strong> <%= @user.examiner? %>
   </p>
-<% end %>
-
-<% if @user.examiner? %>
-  <div class='col-md-3'>
-      View all quizzes
-  </div>
-  <div class='col-md-3'>
-      Create a new quiz
-  </div>
 <% end %>
 
 <% if !@invitations.empty? %>
-  You are invited to answer the following quizzes:
+  Available quizzes:
   <br>
   <ul class='invitations'>
     <li>
@@ -37,18 +28,23 @@
         <div class='col-md-2'>
           Name
         </div>
-        <div class='col-md-4'>
+        <div class='col-md-3'>
           Description
         </div>
         <div class='col-md-1'>
           Sender
         </div>
-        <div class='col-md-3'>
+        <div class='col-md-2'>
           Invited
         </div>
         <div class='col-md-2'>
           Status
         </div>
+        <% if current_user.examiner? %>
+          <div class='col-md-1'>
+            Submissions
+          </div>
+        <% end %>
       </strong>
     </li>
     <% @invitations.each do |invitation| %>
@@ -56,13 +52,13 @@
         <div class='col-md-2'>
           <%= link_to invitation.quiz.name, invitation.quiz %>
         </div>
-        <div class='col-md-4'>
+        <div class='col-md-3'>
           <%= invitation.quiz.description %>
         </div>
         <div class='col-md-1'>
           <%= invitation.sender_name %>
         </div>
-        <div class='col-md-3'>
+        <div class='col-md-2'>
           <%= time_ago_in_words(invitation.created_at) %> ago
         </div>
         <div class='col-md-2'>
@@ -76,6 +72,11 @@
             <% end %>
           </strong>
         </div>
+        <% if current_user.examiner? && invitation.quiz_answer.exists? %>
+          <div class='col-md-1'>
+            <%= link_to 'Download', invitation.quiz_answer.url %>
+          </div>
+        <% end %>
       </li>
     <% end %>
   </ul>

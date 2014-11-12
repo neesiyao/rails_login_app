@@ -1,7 +1,7 @@
 class InvitationsController < ApplicationController
   before_action :logged_in_user
-  before_action :admin_user
-  before_action :examiner_user
+  before_action :invited_user,  only: [:edit, :update]
+  before_action :examiner_user, except: [:edit, :update]
 
   def index
     @invitations = Invitation.all
@@ -17,7 +17,7 @@ class InvitationsController < ApplicationController
   end
 
   def edit
-
+    @invitation = Invitation.find(params[:id])
   end
 
   def create
@@ -45,10 +45,18 @@ class InvitationsController < ApplicationController
   end
 
   def update
-    if @invitation.update(invitation_params)
-      redirect_to @invitation.quiz, flash: { success: 'Invitation was successfully updated' }
+    @invitation = Invitation.find(params[:id])
+    @end_time_converted = Time.parse(@invitation.end_time)
+    if @end_time_converted <= Time.now
+      redirect_to quiz_path(@invitation.quiz), flash: { danger: "Quiz is over" }
+    elsif params[:invitation]
+      if @invitation.update(invitation_params)
+        redirect_to start_quiz_path(@invitation.quiz), flash: { success: 'Attachment was successfully uploaded' }
+      else
+        redirect_to :back, flash: { danger: 'Attachment failed to upload' }
+      end
     else
-      render 'edit'
+      redirect_to start_quiz_path(@invitation.quiz), flash: { danger: 'Attachment cannot be empty' }
     end
   end
 
@@ -60,7 +68,7 @@ class InvitationsController < ApplicationController
 
   private
     def invitation_params
-      params.require(:invitation).permit(:email)
+      params.require(:invitation).permit(:email, :quiz_answer)
     end
 
     def get_name_from_email(email)
@@ -69,5 +77,10 @@ class InvitationsController < ApplicationController
 
     def generate_random_password
       random_password = Array.new(10).map { (65 + rand(58)).chr }.join
+    end
+
+    def invited_user
+      @invitation = Invitation.find(params[:id])
+      redirect_to root_url, flash: { danger: "Access denied" } unless @invitation.email == current_user.email || current_user.examiner? || current_user.admin?
     end
 end

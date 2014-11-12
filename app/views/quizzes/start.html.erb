@@ -11,3 +11,19 @@
     <%= distance_of_time_in_words(Time.now, @end_time_converted, include_seconds: true) %> remaining
   </strong>
 </p>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for @invitation, url: quiz_invitation_path(@quiz, @invitation), :html => { :multipart => true } do |form| %>
+      <%= form.file_field :quiz_answer %>
+      <%= form.submit "Submit", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+
+  <% if @invitation.quiz_answer.exists? %>
+    <div class="col-md-6">
+      <strong>Previously uploaded file:</strong><br>
+      <%= image_tag @invitation.quiz_answer.url %>
+    </div>
+  <% end %>
+</div>

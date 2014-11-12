@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141112031004) do
+ActiveRecord::Schema.define(version: 20141112075439) do
 
   create_table "invitations", force: true do |t|
     t.string   "email"
@@ -20,6 +20,10 @@ ActiveRecord::Schema.define(version: 20141112031004) do
     t.datetime "updated_at"
     t.string   "sender_name"
     t.string   "end_time"
+    t.string   "quiz_answer_file_name"
+    t.string   "quiz_answer_content_type"
+    t.integer  "quiz_answer_file_size"
+    t.datetime "quiz_answer_updated_at"
   end
 
   add_index "invitations", ["quiz_id", "created_at"], name: "index_invitations_on_quiz_id_and_created_at"

@@ -1,5 +1,4 @@
 class QuizzesController < ApplicationController
-  before_action :set_quiz,      only: [:show, :edit, :update, :destroy]
   before_action :logged_in_user
   before_action :invited_user,  only: [:show, :start]
   before_action :examiner_user, except: [:show, :start]
@@ -61,7 +60,7 @@ class QuizzesController < ApplicationController
     end
     @end_time_converted = Time.parse(@invitation.end_time)
     if @end_time_converted <= Time.now
-      redirect_to :back, flash: { danger: "Quiz is over" }
+      redirect_to quiz_path, flash: { danger: "Quiz is over" }
     end
   end
 
@@ -73,11 +72,6 @@ class QuizzesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_quiz
-      @quiz = Quiz.find(params[:id])
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def quiz_params
       params.require(:quiz).permit(:name, :description)
